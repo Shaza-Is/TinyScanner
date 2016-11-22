@@ -9,6 +9,7 @@ package tinyscanner;
  *
  * @author shaza
  */
+ 
 public class TinyScanner extends javax.swing.JFrame {
 
     /**
@@ -108,10 +109,33 @@ public class TinyScanner extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+   
+    
+    
     private void scanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanButtonActionPerformed
         // TODO add your handling code here:
+        /*
+        have some index and call getNextToken till the index reaches 
+        the text Area text length
+        */
+        int[] i = {0}; 
+        String code = codeArea.getText();
+        int length = code.length();
+        while(i[0] < length)
+        {
+            ValueTypePair nextToken = getNextToken(i,code.substring(i[0]));
+            
+        }
     }//GEN-LAST:event_scanButtonActionPerformed
 
+    private ValueTypePair getNextToken(int[] index, String remCode)
+    {
+        
+        
+        return new ValueTypePair("","");
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
