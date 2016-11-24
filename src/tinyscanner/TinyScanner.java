@@ -187,6 +187,68 @@ public class TinyScanner extends javax.swing.JFrame {
                         token = Character.toString(charToCheck);
                         type = "PLUS";
                     }
+                    
+                    else if(charToCheck == '-')
+                    {
+                        next = Token.DONE;
+                        tokenLength +=1;
+                        token = Character.toString(charToCheck);
+                        type = "Minus";
+                    }
+                    else if(charToCheck == '*')
+                    {
+                        next = Token.DONE;
+                        tokenLength +=1;
+                        token = Character.toString(charToCheck);
+                        type = "Multiply";
+                    }
+                    else if(charToCheck == '/')
+                    {
+                        next = Token.DONE;
+                        tokenLength +=1;
+                        token = Character.toString(charToCheck);
+                        type = "Over";
+                    }
+                    
+                    else if(charToCheck == '=')
+                    {
+                        next = Token.DONE;
+                        tokenLength +=1;
+                        token = Character.toString(charToCheck);
+                        type = "Conditional Equal";
+                    }
+                    
+                    else if(charToCheck == '<')
+                    {
+                        next = Token.DONE;
+                        tokenLength +=1;
+                        token = Character.toString(charToCheck);
+                        type = "Less than";
+                    }
+                    
+                    else if(charToCheck == '(')
+                    {
+                        next = Token.DONE;
+                        tokenLength +=1;
+                        token = Character.toString(charToCheck);
+                        type = "Left parenthesis";
+                    }
+                    
+                    else if(charToCheck == ')')
+                    {
+                        next = Token.DONE;
+                        tokenLength +=1;
+                        token = Character.toString(charToCheck);
+                        type = "Right parenthesis";
+                    }
+                    
+                    else if(charToCheck == ';')
+                    {
+                        next = Token.DONE;
+                        tokenLength +=1;
+                        token = Character.toString(charToCheck);
+                        type = "Semi-Colon";
+                    }
                     break;
                 case IDENTIFIER:
                     if(Character.isLetter(charToCheck))
@@ -198,6 +260,37 @@ public class TinyScanner extends javax.swing.JFrame {
                     else
                     {
                         next = Token.DONE;
+                        if(token == "if")
+                        {
+                            type = "reserv IF";
+                        }
+                        else if(token == "then")
+                        {
+                            type = "reserv then";
+                        }
+                        else if(token == "else")
+                        {
+                            type = "reserv else";
+                        }else if(token == "end")
+                        {
+                            type = "reserv end";
+                        }
+                        else if(token == "repeat")
+                        {
+                            type = "reserv repeat";
+                        }
+                        else if(token == "until")
+                        {
+                            type = "reserv UNTIL";
+                        }
+                        else if(token == "read")
+                        {
+                            type = "reserv read";
+                        }
+                        else if(token == "write")
+                        {
+                            type = "reserv write";
+                        }
                     }
                     break;
                 case NUMBER:
