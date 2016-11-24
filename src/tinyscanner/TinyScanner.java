@@ -7,6 +7,7 @@ package tinyscanner;
 
 
 import javax.swing.table.*;
+import java.util.*;
 
 /**
  *
@@ -120,18 +121,25 @@ public class TinyScanner extends javax.swing.JFrame {
         have some index and call getNextToken till the index reaches 
         the text Area text length
         */
-        int i = 0; 
+        
         String code = codeArea.getText();
-        int length = code.length();
+        List<String> lines = Arrays.asList(code.split("\n"));
+        
         
         DefaultTableModel model = (DefaultTableModel)tokenTable.getModel();
         model.setRowCount(0);
+        for(int lno= 0; lno < lines.size(); lno++)
+        {
+            int i = 0; 
+            String co = lines.get(lno);
+            int length = co.length();
         while(i < length)
         {
-            ValueTypePair nextToken = getNextToken(code.substring(i));    
+            ValueTypePair nextToken = getNextToken(co.substring(i));    
             //Object[] row = {nextToken.getTokenValue(),nextToken.getTokenType()};
             model.addRow(new Object[]{nextToken.getTokenValue(),nextToken.getTokenType()}); 
             i = i + nextToken.getTokenLength();
+        }
         }
     }//GEN-LAST:event_scanButtonActionPerformed
 
@@ -146,6 +154,7 @@ public class TinyScanner extends javax.swing.JFrame {
         while(tokenLength < remLength)
         {
             char charToCheck = remCode.charAt(tokenLength);
+            
             switch (next)
             {
                 case START:
