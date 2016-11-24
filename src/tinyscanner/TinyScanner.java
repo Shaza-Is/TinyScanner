@@ -5,6 +5,9 @@
  */
 package tinyscanner;
 
+
+import javax.swing.table.*;
+
 /**
  *
  * @author shaza
@@ -12,10 +15,12 @@ package tinyscanner;
  
 public class TinyScanner extends javax.swing.JFrame {
 
+    //public DefaultTableModel model = new DefaultTableModel(); 
     /**
      * Creates new form MainWindow
      */
     public TinyScanner() {
+        
         initComponents();
     }
 
@@ -52,13 +57,10 @@ public class TinyScanner extends javax.swing.JFrame {
 
         tokenTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
-                "TokenValue", "TokenType"
+                "Token Value", "Token Type"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -85,12 +87,12 @@ public class TinyScanner extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane3)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(scanButton)))
-                        .addGap(23, 23, 23))))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(scanButton)
+                        .addGap(23, 23, 23))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,9 +103,9 @@ public class TinyScanner extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(scanButton)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -121,18 +123,121 @@ public class TinyScanner extends javax.swing.JFrame {
         int[] i = {0}; 
         String code = codeArea.getText();
         int length = code.length();
+        
+        DefaultTableModel model = (DefaultTableModel)tokenTable.getModel();
+        model.setRowCount(0);
         while(i[0] < length)
         {
-            ValueTypePair nextToken = getNextToken(i,code.substring(i[0]));
+            ValueTypePair nextToken = getNextToken(i,code.substring(i[0]));    
+            //Object[] row = {nextToken.getTokenValue(),nextToken.getTokenType()};
+            model.addRow(new Object[]{nextToken.getTokenValue(),nextToken.getTokenType()}); 
             
         }
     }//GEN-LAST:event_scanButtonActionPerformed
 
     private ValueTypePair getNextToken(int[] index, String remCode)
     {
+        Token next = Token.START;
         
+        String token = "";
+        String type = "";
+        int tokenLength = 0;
+        int remLength = remCode.length();
+        while(tokenLength < remLength)
+        {
+            char charToCheck = remCode.charAt(tokenLength);
+            switch (next)
+            {
+                case START:
+                    if(Character.isLetter(charToCheck))
+                    {
+                        next = Token.IDENTIFIER;
+                        token = Character.toString(charToCheck);
+                        type = "Identifier";
+                        tokenLength +=1;
+                    }
+                    else if(Character.isDigit(charToCheck))
+                    {
+                        next = Token.NUMBER;
+                        token = Character.toString(charToCheck);
+                        type = "Number";
+                        tokenLength +=1;
+                    }
+                    else if(Character.isSpaceChar(charToCheck))
+                    {
+                        next = Token.START;
+                        tokenLength +=1;
+                    }
+                    else if(charToCheck == '{')
+                    {
+                        next = Token.COMMENT;
+                        tokenLength +=1;
+                    }
+                    else if(charToCheck == ':')
+                    {
+                        next = Token.ASSIGN;
+                        tokenLength +=1;
+                        token = Character.toString(charToCheck);
+                        type = "Assignment";
+                    }
+                    else if(charToCheck == '+')
+                    {
+                        next = Token.DONE;
+                        tokenLength +=1;
+                        token = Character.toString(charToCheck);
+                        type = "PLUS";
+                    }
+                    break;
+                case IDENTIFIER:
+                    if(Character.isLetter(charToCheck))
+                    {
+                        next = Token.IDENTIFIER;
+                        tokenLength +=1;
+                        token = token + Character.toString(charToCheck);
+                    }
+                    else
+                    {
+                        next = Token.DONE;
+                    }
+                    break;
+                case NUMBER:
+                    if(Character.isDigit(charToCheck))
+                    {
+                        next = Token.NUMBER;
+                        tokenLength +=1;
+                        token = token + Character.toString(charToCheck);
+                    }
+                    else
+                    {
+                        next = Token.DONE;
+                    }
+                    break;
+                case ASSIGN:
+                    if(charToCheck == '=')
+                    {
+                        next = Token.DONE;
+                        tokenLength +=1;
+                        token = token + Character.toString(charToCheck);
+                    }
+                    break;
+                case COMMENT:
+                    if(charToCheck == '}')
+                    {
+                        next = Token.DONE;
+                    }
+                    tokenLength +=1;
+                    break;
+                case DONE:
+                    index[0] = index[0] + tokenLength;
+                    return new ValueTypePair(token,type);
+                
+                default:
+                    break;
+            }
+            
+        }
         
-        return new ValueTypePair("","");
+        return new ValueTypePair(token,type);
     }
     
     
