@@ -269,34 +269,34 @@ public class TinyScanner extends javax.swing.JFrame {
                     else
                     {
                         next = Token.DONE;
-                        if(token == "if")
+                        if(token.equals("if"))
                         {
                             type = "reserv IF";
                         }
-                        else if(token == "then")
+                        else if(token.equals("then"))
                         {
                             type = "reserv then";
                         }
-                        else if(token == "else")
+                        else if(token.equals("else"))
                         {
                             type = "reserv else";
-                        }else if(token == "end")
+                        }else if(token.equals("end"))
                         {
                             type = "reserv end";
                         }
-                        else if(token == "repeat")
+                        else if(token.equals("repeat"))
                         {
                             type = "reserv repeat";
                         }
-                        else if(token == "until")
+                        else if(token.equals("until"))
                         {
                             type = "reserv UNTIL";
                         }
-                        else if(token == "read")
+                        else if(token.equals("read"))
                         {
                             type = "reserv read";
                         }
-                        else if(token == "write")
+                        else if(token.equals("write"))
                         {
                             type = "reserv write";
                         }
