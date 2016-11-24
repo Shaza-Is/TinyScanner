@@ -12,10 +12,13 @@ package tinyscanner;
 public class ValueTypePair {
     private final String value;
     private final String type;
-    public ValueTypePair(String v, String t){
+    private int length;
+    public ValueTypePair(String v, String t, int l){
         this.value = v;
         this.type = t;
+        this.length = l;
     }
     public String getTokenValue(){ return value;}
     public String getTokenType(){ return type;}
+    public int getTokenLength(){ return length;}
 }

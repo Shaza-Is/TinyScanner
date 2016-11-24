@@ -120,22 +120,22 @@ public class TinyScanner extends javax.swing.JFrame {
         have some index and call getNextToken till the index reaches 
         the text Area text length
         */
-        int[] i = {0}; 
+        int i = 0; 
         String code = codeArea.getText();
         int length = code.length();
         
         DefaultTableModel model = (DefaultTableModel)tokenTable.getModel();
         model.setRowCount(0);
-        while(i[0] < length)
+        while(i < length)
         {
-            ValueTypePair nextToken = getNextToken(i,code.substring(i[0]));    
+            ValueTypePair nextToken = getNextToken(code.substring(i));    
             //Object[] row = {nextToken.getTokenValue(),nextToken.getTokenType()};
             model.addRow(new Object[]{nextToken.getTokenValue(),nextToken.getTokenType()}); 
-            
+            i = i + nextToken.getTokenLength();
         }
     }//GEN-LAST:event_scanButtonActionPerformed
 
-    private ValueTypePair getNextToken(int[] index, String remCode)
+    private ValueTypePair getNextToken(String remCode)
     {
         Token next = Token.START;
         
@@ -321,8 +321,8 @@ public class TinyScanner extends javax.swing.JFrame {
                     tokenLength +=1;
                     break;
                 case DONE:
-                    index[0] = index[0] + tokenLength;
-                    return new ValueTypePair(token,type);
+                    //index[0] = index[0] + tokenLength;
+                    return new ValueTypePair(token,type,tokenLength);
                 
                 default:
                     break;
@@ -330,7 +330,7 @@ public class TinyScanner extends javax.swing.JFrame {
             
         }
         
-        return new ValueTypePair(token,type);
+        return new ValueTypePair(token,type,tokenLength);
     }
     
     
